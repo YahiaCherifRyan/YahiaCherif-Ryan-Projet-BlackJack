@@ -1,0 +1,62 @@
+const cartesPossibles = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+
+function tirerCarte() {
+  return cartesPossibles[Math.floor(Math.random() * cartesPossibles.length)];
+}
+
+function calculerValeurMain(main) {
+  let valeur = 0;
+  let nbAs = 0;
+
+  for (const carte of main) {
+    if (carte === "A") {
+      valeur += 11;
+      nbAs++;
+    } else {
+      valeur += parseInt(carte);
+    }
+  }
+
+  // Ajuster les As si on dépasse 21
+  while (valeur > 21 && nbAs > 0) {
+    valeur -= 10;
+    nbAs--;
+  }
+
+  return valeur;
+}
+
+// --- Tirage
+const mainJoueur = [tirerCarte(), "A"]; // On force un As pour tester le tableau As
+const carteCroupier = tirerCarte();
+
+// --- Calculs
+const x = calculerValeurMain(mainJoueur);
+const y = carteCroupier === "A" ? 11 : parseInt(carteCroupier);
+
+console.log(`Main joueur: ${mainJoueur.join('-')} (Total: ${x})`);
+console.log(`Croupier: ${carteCroupier} (Valeur: ${y})`);
+console.log("Action :");
+
+// --- Tableau 2 “As” (soft hands)
+if (x >= 19) {
+  console.log("Rester");
+}
+else if (x === 18 && y >= 2 && y <= 6) {
+  console.log("Doubler");
+}
+else if (x === 18 && (y === 7 || y === 8)) {
+  console.log("Rester");
+}
+else if (x === 17 && y >= 3 && y <= 6) {
+  console.log("Doubler");
+}
+else if ((x === 15 || x === 16) && y >= 4 && y <= 6) {
+  console.log("Doubler");
+}
+else if ((x === 13 || x === 14) && y >= 5 && y <= 6) {
+  console.log("Doubler");
+}
+else {
+  console.log("Tirer");
+}
